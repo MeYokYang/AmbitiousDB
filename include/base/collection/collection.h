@@ -35,4 +35,35 @@ public:
 
 };
 
+template <typename T>
+class Queue : public Collection<T>
+{
+protected:
+    static const ulong  MAX_LEN = ULONG_MAX;
+    ulong               len;
+
+public:
+
+};
+
+template <typename T>
+class Set : public Collection<T>
+{
+protected:
+    static const ulong  MAX_LEN = ULONG_MAX;
+    ulong               len;
+
+public:
+
+};
+
+template <typename T>
+class Map : public Object
+{
+private:
+
+public:
+
+};
+
 #endif // COLLECTION_H

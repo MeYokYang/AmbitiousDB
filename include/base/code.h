@@ -5,7 +5,7 @@
 
 enum code : uint
 {
-    SUCCESS = 0,
+    AT_SUCCESS = 0,
 
     OUT_OF_STR_MAX_LEN = 1,
 

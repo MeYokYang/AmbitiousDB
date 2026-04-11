@@ -13,11 +13,5 @@ set(LIBRARY_OUTPUT_PATH ${LIB_PATH})
 add_library(${ATBASE} SHARED ${SRC})
 
 # 头文件目录设置
-set(BASE_INCLUDE_DIRS ${HEAD_PATH}/base)
-file(GLOB SUBDIR_LIST RELATIVE ${HEAD_PATH}/base ${HEAD_PATH}/base/*/)
-foreach(subdir ${SUBDIR_LIST})
-  list(APPEND BASE_INCLUDE_DIRS ${HEAD_PATH}/base/${subdir})
-endforeach()
-include_directories(${BASE_INCLUDE_DIRS})
-
+include_directories(${MIX_HEAD_PATH})
 

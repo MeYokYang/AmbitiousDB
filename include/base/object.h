@@ -9,8 +9,7 @@ class Object
 private:
 
 public:
-    Object();
-    virtual ~Object();
+    virtual ~Object() = default;
 
     const ulong hashCode() const ;
     const char* toString() const ;

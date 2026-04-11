@@ -1,16 +1,17 @@
 #ifndef STR_H
 #define STR_H
 
-#include "standard.h"
 #include "object.h"
+#include "standard.h"
+#include "tag.h"
 
 
-class Str : public Object
+class Str : public Object, public Comparable, public RandomAccessible<char, ulong>
 {
 private:
-    char* data;
-    ulong len;
-    static const ulong MAX_LEN = ULONG_MAX;
+    static const ulong  MAX_LEN = ULONG_MAX;
+    char*               data;
+    ulong               len;
 
 public:
     Str();
@@ -19,13 +20,14 @@ public:
     Str& operator=(const Str& other);
     explicit Str(const char* str);
 
+    bool operator==(const Comparable& other) const override;
+    bool operator<(const Comparable& other) const override;
+
+    char& operator[](ulong index) override;
+    const char& operator[](ulong index) const override;
+
     ulong length() const { return len; }
-    friend bool operator==(const Str& lhs, const Str& rhs);
-    friend bool operator!=(const Str& lhs, const Str& rhs);
-    friend bool operator<(const Str& lhs, const Str& rhs);
-    friend bool operator>(const Str& lhs, const Str& rhs);
-    char& operator[](ulong index);
-    const char& operator[](ulong index) const;
+
 };
 
 #endif // STR_H

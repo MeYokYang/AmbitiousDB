@@ -1,4 +1,5 @@
 #include "str_utils.h"
+#include "format.h"
 
 ulong SubStrSearch::brute_force_search(const Str& text, const Str& pattern, ulong start_pos)
 {

@@ -13,6 +13,14 @@ set(PROJECT_HOME ${PROJECT_SOURCE_DIR})
 
 # 头文件目录
 set(HEAD_PATH ${PROJECT_HOME}/include)
+set(MIX_HEAD_PATH ${HEAD_PATH}/base)
+file(GLOB SUBDIR_LIST RELATIVE ${HEAD_PATH}/base ${HEAD_PATH}/base/*)
+foreach(subdir ${SUBDIR_LIST})
+  if(IS_DIRECTORY ${HEAD_PATH}/base/${subdir})
+    list(APPEND MIX_HEAD_PATH ${HEAD_PATH}/base/${subdir})
+  endif()
+endforeach()
+
 # 库文件目录
 set(LIB_PATH ${PROJECT_HOME}/lib)
 # 可执行文件目录
@@ -27,10 +35,12 @@ set(ATCLIENT atclient)
 
 # 子目录CMakeLists.txt
 function(add_all_subdirectories)
-    file(GLOB_RECURSE SUBDIRS RELATIVE ${PROJECT_HOME} */CMakeLists.txt)
+    file(GLOB_RECURSE SUBDIRS RELATIVE ${PROJECT_HOME} **/CMakeLists.txt)
     foreach(SUBDIR ${SUBDIRS})
         get_filename_component(DIR ${SUBDIR} DIRECTORY)
-        add_subdirectory(${DIR})
+        if(NOT DIR STREQUAL ".")
+            add_subdirectory(${DIR})
+        endif()
     endforeach(SUBDIR ${})
 endfunction(add_all_subdirectories)
 add_all_subdirectories()

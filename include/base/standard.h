@@ -30,35 +30,47 @@ static const int ret_or[3][3] = {
 #define char        char
 
 #ifdef M32  // 32-bit machine
+#define sshort      signed short
+#define ushort      unsigned short
 #define sint        signed int
 #define uint        unsigned int
 #define slong       signed long
 #define ulong       unsigned long
-#define sshort      signed short
-#define ushort      unsigned short
+
+#define USHORT_NONE     0xFFFF
+#define USHORT_MAX      0xFFFE
+#define UINT_NONE       0xFFFFFFFF
+#define UINT_MAX        0xFFFFFFFE
 #define ULONG_NONE      0xFFFFFFFFFFFFFFFF
 #define ULONG_MAX       0xFFFFFFFFFFFFFFFE
 #elif M64   // 64-bit machine
+#define sshort      signed short
+#define ushort      unsigned short
 #define sint        signed int
 #define uint        unsigned int
 #define slong       signed long
 #define ulong       unsigned long
-#define sshort      signed short
-#define ushort      unsigned short
+
+#define USHORT_NONE     0xFFFF
+#define USHORT_MAX      0xFFFE
+#define UINT_NONE       0xFFFFFFFF
+#define UINT_MAX        0xFFFFFFFE
 #define ULONG_NONE      0xFFFFFFFFFFFFFFFF
 #define ULONG_MAX       0xFFFFFFFFFFFFFFFE
 #else // default
+#define sshort      signed short
+#define ushort      unsigned short
 #define sint        signed int
 #define uint        unsigned int
 #define slong       signed long
 #define ulong       unsigned long
-#define sshort      signed short
-#define ushort      unsigned short
+
+#define USHORT_NONE     0xFFFF
+#define USHORT_MAX      0xFFFE
+#define UINT_NONE       0xFFFFFFFF
+#define UINT_MAX        0xFFFFFFFE
 #define ULONG_NONE      0xFFFFFFFFFFFFFFFF
 #define ULONG_MAX       0xFFFFFFFFFFFFFFFE
 #endif
-
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #endif // STANDARD_H

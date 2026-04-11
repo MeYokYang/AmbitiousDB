@@ -6,6 +6,7 @@ set(HOME ${PROJECT_CURRENT_SOURCE_DIR})
 # 源文件路径
 # 头文件
 include_directories(${HEAD_PATH}/client)
+include_directories(${MIX_HEAD_PATH})
 # 源文件
 file(GLOB_RECURSE SRC "*.cpp")
 
@@ -19,4 +20,4 @@ add_executable(${ATCLIENT} ${SRC})
 # 库路径
 link_directories(${LIB_PATH})
 # 链接
-target_link_libraries(${ATCLIENT} PRIVATE ${ATTOOL})
+target_link_libraries(${ATCLIENT} PRIVATE ${ATBASE})

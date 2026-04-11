@@ -1,4 +1,5 @@
 #include "str.h"
+#include "format.h"
 
 
 Str::Str() : data(NULL), len(0) {}
@@ -30,23 +31,28 @@ Str& Str::operator=(const Str& other)
 
     delete[] data;
     len = other.len;
-    data = new char[len + 1];
-    for (ulong i = 0; i < len; i++) {
-        data[i] = other.data[i];
+    if (len == 0) {
+        data = NULL;
+    } else {
+        data = new char[len + 1];
+        for (ulong i = 0; i < len; i++) {
+            data[i] = other.data[i];
+        }
+        data[len] = '\0';
     }
-    data[len] = '\0';
-
     return *this;
 }
 
 Str::Str(const char* str) : data(NULL), len(0)
 {
-    len = 0;
-
-    if (str == NULL) 
+    if (str == NULL) {
         data = NULL;
-    else {
-        while (str[len] != '\0') { len++; }
+        len = 0;
+    } else {
+        len = 0;
+        while (str[len] != '\0') {
+            len++;
+        }
         data = new char[len + 1];
         for (ulong i = 0; i < len; i++) {
             data[i] = str[i];
@@ -55,33 +61,52 @@ Str::Str(const char* str) : data(NULL), len(0)
     }
 }
 
-bool operator==(const Str& lhs, const Str& rhs)
+bool Str::operator==(const Comparable& other) const
 {
-    if (lhs.len != rhs.len)
+    const Str* other_str = dynamic_cast<const Str*>(&other);
+    if (!other_str) {
+        return FALSE; // Not comparable
+    }
+    if (len != other_str->len) {
         return FALSE;
-    for (ulong i = 0; i < lhs.len; i++) {
-        if (lhs.data[i] != rhs.data[i])
+    }
+    for (ulong i = 0; i < len; i++) {
+        if (data[i] != other_str->data[i]) {
             return FALSE;
+        }
     }
     return TRUE;
 }
 
-bool operator!=(const Str& lhs, const Str& rhs) { return (lhs == rhs) ? FALSE : TRUE; }
-
-bool operator<(const Str& lhs, const Str& rhs)
+bool Str::operator<(const Comparable& other) const
 {
-    ulong minLen = (lhs.len < rhs.len) ? lhs.len : rhs.len;
-    for (ulong i = 0; i < minLen; i++) {
-        if (lhs.data[i] < rhs.data[i])
-            return TRUE;
-        else if (lhs.data[i] > rhs.data[i])
-            return FALSE;
+    const Str* other_str = dynamic_cast<const Str*>(&other);
+    if (!other_str) {
+        return FALSE; // Not comparable
     }
-    return (lhs.len < rhs.len) ? TRUE : FALSE;
+    ulong min_len = (len < other_str->len) ? len : other_str->len;
+    for (ulong i = 0; i < min_len; i++) {
+        if (data[i] < other_str->data[i]) {
+            return TRUE;
+        } else if (data[i] > other_str->data[i]) {
+            return FALSE;
+        }
+    }
+    return len < other_str->len ? TRUE : FALSE;
 }
 
-bool operator>(const Str& lhs, const Str& rhs) { return (lhs < rhs) ? FALSE : TRUE; }
+char& Str::operator[](ulong index)
+{
+    if (index >= len) {
+        // TODO
+    }
+    return data[index];
+}
 
-char& Str::operator[](ulong index) { return data[index]; }
-
-const char& Str::operator[](ulong index) const { return data[index]; }
+const char& Str::operator[](ulong index) const
+{
+    if (index >= len) {
+        // TODO
+    }
+    return data[index];
+}

@@ -1,26 +1,38 @@
 #ifndef COLLECTION_H
 #define COLLECTION_H
 
-#include "standard.h"
 #include "object.h"
-#include "code.h"
+#include "tag.h"
+#include "standard.h"
 
 
 template <typename T>
 class Collection : public Object
+    //, public Iterable<T>
 {
-private:
-
 public:
-    virtual ulong getMaxLen() const = 0;
-    virtual ulong len() const = 0;
+    virtual bool isEmpty() const = 0;
+    virtual bool clear() = 0;
 
-    virtual code reverse() = 0;
-    virtual code clear() = 0;
-
-    virtual ~Collection() = default;
 };
 
+template <typename T>
+class List : public Collection<T>
+{
+protected:
+    static const ulong  MAX_LEN = ULONG_MAX;
+    ulong               len;
 
+public:
+    bool isEmpty() const override { return len == 0 ? TRUE : FALSE; }
+    ulong length() const { return len; }
+    virtual bool insert(const T& d, ulong pos = ULONG_NONE) = 0;
+    virtual bool insertFirst(const T& d) { return insert(d, 0); }
+    virtual bool insertLast(const T& d) { return insert(d); }
+    virtual bool remove(ulong pos = ULONG_NONE) = 0;
+    virtual bool removeFirst() { return remove(0); }
+    virtual bool removeLast() { return remove(); }
+
+};
 
 #endif // COLLECTION_H

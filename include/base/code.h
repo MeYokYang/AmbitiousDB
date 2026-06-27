@@ -1,17 +1,19 @@
-#ifndef CODE_H
-#define CODE_H
+#ifndef AMBI_CODE_H
+#define AMBI_CODE_H
 
 #include "standard.h"
 
-enum code : uint
+namespace ambi {
+
+
+enum class code : uint
 {
     AT_SUCCESS = 0,
-
     OUT_OF_STR_MAX_LEN = 1,
-
-
-
+    
 };
 
 
-#endif // CODE_H
+} // namespace ambi
+
+#endif // AMBI_CODE_H

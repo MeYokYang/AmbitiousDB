@@ -1,6 +1,8 @@
 #include "str_utils.h"
 #include "format.h"
 
+namespace ambi {
+
 ulong SubStrSearch::brute_force_search(const Str& text, const Str& pattern, ulong start_pos)
 {
     ulong text_len = text.length();
@@ -21,10 +23,10 @@ ulong SubStrSearch::brute_force_search(const Str& text, const Str& pattern, ulon
     return ULONG_NONE; // Not found
 }
 
-Arr<ulong> SubStrSearch::compute_kmp_table(const Str& pattern)
+Vec<ulong> SubStrSearch::compute_kmp_table(const Str& pattern)
 {
     ulong pattern_len = pattern.length();
-    Arr<ulong> kmp_table(pattern_len);
+    Vec<ulong> kmp_table(pattern_len);
     kmp_table[0] = 0;
 
     ulong j = 0;
@@ -48,7 +50,7 @@ ulong SubStrSearch::kmp_search(const Str& text, const Str& pattern, ulong start_
     if (pattern_len == 0 || text_len < pattern_len || start_pos >= text_len)
         return ULONG_NONE; // Not found
 
-    Arr<ulong> kmp_table = compute_kmp_table(pattern);
+    Vec<ulong> kmp_table = compute_kmp_table(pattern);
     ulong j = 0;
     for (ulong i = start_pos; i < text_len; ++i) {
         while (j > 0 && text[i] != pattern[j]) {
@@ -64,9 +66,9 @@ ulong SubStrSearch::kmp_search(const Str& text, const Str& pattern, ulong start_
     return ULONG_NONE; // Not found
 }
 
-Arr<ulong> SubStrSearch::compute_boyer_moore_bad_char_table(const Str& pattern)
+Vec<ulong> SubStrSearch::compute_boyer_moore_bad_char_table(const Str& pattern)
 {
-    Arr<ulong> bad_char_table(256); // Assuming ASCII character set
+    Vec<ulong> bad_char_table(256); // Assuming ASCII character set
     for (ulong i = 0; i < 256; ++i) {
         bad_char_table[i] = ULONG_NONE; // Initialize to not found
     }
@@ -76,11 +78,11 @@ Arr<ulong> SubStrSearch::compute_boyer_moore_bad_char_table(const Str& pattern)
     return bad_char_table;
 }
 
-Arr<ulong> SubStrSearch::compute_boyer_moore_good_suffix_table(const Str& pattern)
+Vec<ulong> SubStrSearch::compute_boyer_moore_good_suffix_table(const Str& pattern)
 {
     ulong pattern_len = pattern.length();
-    Arr<ulong> good_suffix_table(pattern_len);
-    Arr<ulong> border_pos(pattern_len + 1);
+    Vec<ulong> good_suffix_table(pattern_len);
+    Vec<ulong> border_pos(pattern_len + 1);
 
     // Preprocessing for good suffix rule
     border_pos[pattern_len] = pattern_len + 1;
@@ -116,8 +118,8 @@ ulong SubStrSearch::boyer_moore_search(const Str& text, const Str& pattern, ulon
     if (pattern_len == 0 || text_len < pattern_len || start_pos >= text_len)
         return ULONG_NONE; // Not found
 
-    Arr<ulong> bad_char_table = compute_boyer_moore_bad_char_table(pattern);
-    Arr<ulong> good_suffix_table = compute_boyer_moore_good_suffix_table(pattern);
+    Vec<ulong> bad_char_table = compute_boyer_moore_bad_char_table(pattern);
+    Vec<ulong> good_suffix_table = compute_boyer_moore_good_suffix_table(pattern);
 
     ulong s = start_pos; // s is the shift of the pattern with respect to text
     while (s <= text_len - pattern_len) {
@@ -137,3 +139,5 @@ ulong SubStrSearch::boyer_moore_search(const Str& text, const Str& pattern, ulon
     }
     return ULONG_NONE; // Not found
 }
+
+} // namespace ambi

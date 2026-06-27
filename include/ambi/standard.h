@@ -1,5 +1,5 @@
-#ifndef STANDARD_H
-#define STANDARD_H
+#ifndef AMBI_STANDARD_H
+#define AMBI_STANDARD_H
 
 // null and boolean
 #define NULL        nullptr
@@ -20,12 +20,15 @@ static const int ret_or[3][3] = {
 };
 
 // comparison result
-#define CMP_GREATER 1
-#define CMP_EQUAL   0
-#define CMP_LESS    -1
+enum class CmpResult {
+    CMP_UNKNOWN = 2,
+    CMP_GREATER = 1,
+    CMP_EQUAL   = 0,
+    CMP_LESS    = -1
+};
 
 // type definition
-#define bool        bool
+#define boolean     byte
 #define byte        unsigned char
 #define char        char
 
@@ -73,4 +76,30 @@ static const int ret_or[3][3] = {
 #define ULONG_MAX       0xFFFFFFFFFFFFFFFE
 #endif
 
-#endif // STANDARD_H
+#define get_type_max(type) ({\
+    switch (type) {\
+    case ushort:\
+        return USHORT_MAX;\
+    case uint:\
+        return UINT_MAX;\
+    case ulong:\
+        return ULONG_MAX;\
+    default:\
+        return 0;\
+    }\
+})
+
+#define get_type_none(type) ({\
+    switch (type) {\
+    case ushort:\
+        return USHORT_NONE;\
+    case uint:\
+        return UINT_NONE;\
+    case ulong:\
+        return ULONG_NONE;\
+    default:\
+        return 0;\
+    }\
+})
+
+#endif // AMBI_STANDARD_H

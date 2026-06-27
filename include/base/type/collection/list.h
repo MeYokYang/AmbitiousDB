@@ -1,9 +1,11 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef AMBI_LIST_H
+#define AMBI_LIST_H
 
 #include "collection.h"
 #include "iterator.h"
 #include "arr.h"
+
+
 
 
 template <typename T>
@@ -36,8 +38,8 @@ public:
     // : public Iterator<T>
     {
     private:
-        LinkedList  list;
-        Item*       curr;
+        const LinkedList    list;
+        Item*               curr;
 
     public:
         Iter(const LinkedList& l, Item* p = NULL) : list(l), curr(p) {}
@@ -241,7 +243,7 @@ public:
     ArrayList(const ArrayList<T>& other) = default;
     ArrayList& operator=(const ArrayList<T>& other) = default;
 
-    bool clear() override { this->len = 0; return arr.cleanLen(); }
+    bool clear() override { this->len = 0; return arr.clearLen(); }
 
     class Iter
     // : public Iterator<T>
@@ -330,4 +332,4 @@ bool ArrayList<T>::remove(ulong pos)
     return TRUE;
 }
 
-#endif // LIST_H
+#endif // AMBI_LIST_H

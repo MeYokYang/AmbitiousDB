@@ -38,16 +38,16 @@ public:
 
 };
 
-//template <typename T>
-//class Iterable
-//{
-//public:
-//    virtual ~Iterable() = default;
-//
-//    virtual Iterator<T> iter() const = 0;
-//    virtual Iterator<T> begin() const = 0;
-//    virtual Iterator<T> end() const = 0;
-//
-//};
+template <typename T>
+class Iterable
+{
+public:
+    virtual ~Iterable() = default;
+
+    virtual Iterator<T>& iterator() = 0;
+    //virtual void forEach(Consumer<T> consumer) = 0;
+    //Spliterator<T> spliterator() = 0;
+
+};
 
 #endif // TAG_H

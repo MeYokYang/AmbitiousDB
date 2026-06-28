@@ -1,11 +1,11 @@
-#include "ambi/mem/mem.h"
-#include "ambi/base/format.h"
-#include "ambi/base/code.h"
+#include "ambi/mem/at_mem.h"
+#include "ambi/base/at_format.h"
+#include "ambi/base/at_code.h"
 #include <cstring>
 
 namespace atdb {
 
-atvoid at_memcpy(atbyte* dst, ulong dst_len, atbyte* src, ulong src_len) {
+atvoid at_memcpy(atbyte* dst, atulong dst_len, atbyte* src, atulong src_len) {
     at_assert(NULL != dst && NULL != src);
     at_assert(dst != src && dst_len >= src_len);
     at_assert(!(src >= dst && src <= dst + dst_len));
@@ -23,7 +23,7 @@ atvoid at_memcpy(atbyte* dst, ulong dst_len, atbyte* src, ulong src_len) {
     std::memcpy(dst, src, src_len);
 }
 
-atvoid at_memset(atbyte* dst, ulong dst_len, atbyte c) {
+atvoid at_memset(atbyte* dst, atulong dst_len, atbyte c) {
     at_assert(NULL != dst && dst_len > 0);
 
     if (!(NULL != dst && dst_len > 0))

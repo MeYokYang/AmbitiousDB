@@ -1,5 +1,6 @@
-#include "server/server.h"
-#include "ambi/mem/pool.h"
+#include "server/at_server.h"
+#include "ambi/mem/at_pool.h"
+#include <iostream>
 
 
 namespace atdb {
@@ -13,5 +14,6 @@ namespace atserver {
 
 int main () {
 
+    std::cout << "server" << std::endl;
     return 0;
 }

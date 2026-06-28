@@ -1,9 +1,9 @@
 #ifndef AT_POOL_H
 #define AT_POOL_H
 
-#include "ambi/base/code.h"
-#include "ambi/base/format.h"
-#include "ambi/base/type.h"
+#include "ambi/base/at_code.h"
+#include "ambi/base/at_format.h"
+#include "ambi/base/at_type.h"
 #include <new>
 
 namespace atdb {
@@ -15,13 +15,13 @@ enum class PoolType {
     POOL_NORMAL, // 普通内存池
 };
 
-template <typename size_t = ulong> class MemPool {
+template <typename size_t = atulong> class MemPool {
 private:
-    PoolType type;
-    MemPool *parent;
-    size_t size;
-    size_t used;
-    atbyte *ptr;
+    PoolType    type;
+    MemPool*    parent;
+    size_t      size;
+    size_t      used;
+    atbyte*     ptr;
 
     atbool poolInit();
 
@@ -31,7 +31,7 @@ public:
     // MemPool(const MemPool&) = delete;
     // MemPool& operator=(const MemPool&) = delete;
 
-    atbyte *alloc(size_t s);
+    atbyte* alloc(size_t s);
     atbool free(atbyte *p);
     atbool free(MemPool<> &subPool);
 };
@@ -67,7 +67,7 @@ template <typename size_t> MemPool<size_t>::~MemPool() {
     }
 }
 
-template <typename size_t> atbyte *MemPool<size_t>::alloc(size_t s) {
+template <typename size_t> atbyte* MemPool<size_t>::alloc(size_t s) {
 
     try {
         // TODO

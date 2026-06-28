@@ -21,7 +21,10 @@ build()
     cd build
     cmake -DCMAKE_BUILD_TYPE=Debug ..
     make
+    ln -sf ${PROJECT_HOME}/build/compile_commands.json ${PROJECT_HOME}/compile_commands.json
 }
+
+PROJECT_HOME=$(cd "$(dirname "$0")" && pwd)
 
 echo_err()
 {

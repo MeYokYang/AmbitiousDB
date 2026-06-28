@@ -1,12 +1,12 @@
 #ifndef AT_CODE_H
 #define AT_CODE_H
 
-#include "ambi/base/type.h"
+#include "ambi/base/at_type.h"
 
 namespace atdb {
 
 
-enum class Code : uint
+enum class Code : atuint
 {
     AT_SUCCESS          = 0,
 

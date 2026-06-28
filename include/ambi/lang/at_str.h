@@ -1,15 +1,15 @@
 #ifndef AT_STR_H
 #define AT_STR_H
 
-#include "ambi/mem/pool.h"
-#include "ambi/lang/character.h"
+#include "ambi/mem/at_pool.h"
+#include "ambi/lang/at_character.h"
 
 namespace atdb {
 
 
-#define Str                 BaseStr<atchar, ulint>
+#define Str                 BaseStr<atchar, atuint>
 
-template <typename T = atchar, typename size_t = uint>
+template <typename T = atchar, typename size_t = atuint>
 class BaseStr {
 private:
     MemPool<>           pool;
@@ -59,8 +59,8 @@ public:
     atbool compare() const;
 
     // convert
-    sint stoi() const;
-    slong stol() const;
+    atint stoi() const;
+    atlong stol() const;
     // TODO stod
     T* to_string() const;
 };

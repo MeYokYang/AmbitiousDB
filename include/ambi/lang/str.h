@@ -1,444 +1,141 @@
-#ifndef AMBI_STR_H
-#define AMBI_STR_H
+#ifndef AT_STR_H
+#define AT_STR_H
 
-#include "standard.h"
+#include "ambi/mem/pool.h"
+#include "ambi/lang/character.h"
 
-namespace ambi{
+namespace atdb {
 
 
-typedef     BaseStr<char>   Str;
+#define Str                 BaseStr<atchar, ulint>
 
-#define     _str_size_t                     ulong
-#define     _str_max_len                    get_type_max(_str_size_t)
-#define     _str_size_none                  get_type_none(_str_size_t)
-//#define     _str_storage_type_threshold     64
-
-template <typename T>
-class BaseStr
-{
+template <typename T = atchar, typename size_t = uint>
+class BaseStr {
 private:
-    //enum class STORAGE_TYPE { STACK, HEAP };
-    _str_size_t             capacity;
-    _str_size_t             len;
-    T*                      data;
-    //STORAGE_TYPE            type;
+    MemPool<>           pool;
+    static const size_t MAX_LEN = TYPE_MAX(size_t);
+    T*                  str;
+    size_t              len;
+    size_t              cap;
 
 public:
-    explicit BaseStr(const T* s = NULL);
-    BaseStr(_str_size_t l, const T c);
-    BaseStr(const BaseStr<T>& other);
-    BaseStr<T>& operator=(const BaseStr<T>& other);
-    ~BaseStr() { delete[] data; };
+    // ctor
+    BaseStr() : pool(getConstPool()), str(NULL), len(0), cap(0) {};
+    BaseStr(const BaseStr<T, size_t>& other);
+    explicit BaseStr(const T* s);
+    BaseStr(size_t s, T c);
+    ~BaseStr();
+    BaseStr(const BaseStr<T, size_t>&& other);
+    BaseStr operator=(const BaseStr<T, size_t>& other);
+    BaseStr operator=(const BaseStr<T, size_t>&& other);
+    // TODO assign
 
-    boolean assign(const T* s);
-    boolean assign(_str_size_t l, const T& c);
-    boolean assign(const BaseStr<T>& other);
-    boolean swap(BaseStr<T>& other);
+    // capacity
+    size_t size() const { return len; }
+    atbool empty() const { return 0 == len; }
+    size_t capacity() const { return cap; }
+    size_t reserve() const { return cap - len; }
+    atbool shrink_to_fit();
+    atvoid clear();
 
-    T& operator[](_str_size_t index) { return data[index]; }
-    const T& operator[](_str_size_t index) const { return data[index]; }
-    T& at(_str_size_t index);
-    const T& at(_str_size_t index) const;
-    T& front() { return data[0]; }
-    const T& front() const { return data[0]; }
-    T& back() { return data[len - 2]; }
-    const T& back() const { return data[len - 2]; }
-    T* data() { return data; }
-    const T* data() const { return data; }
+    // modify
+    BaseStr<T, size_t>& operator+=(const BaseStr<T, size_t> other);
+    BaseStr<T, size_t>& append(const BaseStr<T, size_t> other) { return this + other; }
+    BaseStr<T, size_t>& push_back();
+    BaseStr<T, size_t>& insert(T c, size_t pos);
+    BaseStr<T, size_t>& erase();
+    BaseStr<T, size_t>& replace();
+    BaseStr<T, size_t>& swap();
+    BaseStr<T, size_t>& pop_back();
 
-    // iter
-    // TODO
+    // search and compare
+    size_t find(T c, size_t start = 0) const;
+    size_t rfind(T c, size_t start) const;
+    size_t find_first_of(T c) const;
+    size_t find_first_not_of(T c) const;
+    size_t find_last_of(T c) const;
+    size_t find_last_not_of(T c) const;
+    size_t substr() const;
+    atbool compare() const;
 
-    boolean empty() const { return len == 0 ? TRUE : FALSE; }
-    _str_size_t size() const { return len; }
-    _str_size_t length() const { return len; }
-    _str_size_t max_size() const { return _str_max_len; }
-    _str_size_t capacity() const { return capacity; }
-    boolean reserve(_str_size_t l);
-    boolean shrink_to_fit();
-
-    BaseStr<T>& clear();
-    BaseStr<T>& insert(_str_size_t pos, const T* s);
-    BaseStr<T>& insert(_str_size_t pos, _str_size_t l, const T c);
-    BaseStr<T>& insert(_str_size_t pos, const BaseStr<T>& other);
-    BaseStr<T>& erase(_str_size_t pos, _str_size_t l = _str_size_none);
-    BaseStr<T>& push_back(const T& c);
-    BaseStr<T>& pop_back();
-    BaseStr<T>& append(const BaseStr<T>& other);
-    BaseStr<T>& append(const T* s);
-    BaseStr<T>& append(_str_size_t l, const T c);
-    BaseStr<T>& operator+=(const BaseStr<T>& other);
-    BaseStr<T>& operator+=(const T* s);
-    BaseStr<T>& operator+=(const T c);
-    BaseStr<T>& replace(_str_size_t pos, _str_size_t l, const T* s);
-    BaseStr<T>& replace(_str_size_t pos, _str_size_t l, const BaseStr<T>& other);
-    BaseStr<T>& resize(_str_size_t l);
-    BaseStr<T>& resize(_str_size_t l, const T& c);
-    BaseStr<T>& substr(_str_size_t pos, _str_size_t l = _str_size_none);
-    //copy()
-
-    _str_size_t find(const T* s, _str_size_t pos = 0) const;
-    _str_size_t find(const BaseStr<T>& other, _str_size_t pos = 0) const;
-    _str_size_t find(const T& c, _str_size_t pos = 0) const;
-    _str_size_t rfind(const T* s, _str_size_t pos = 0) const;
-    _str_size_t rfind(const BaseStr<T>& other, _str_size_t pos = 0) const;
-    _str_size_t rfind(const T& c, _str_size_t pos = 0) const;
-    _str_size_t find_first_of(const T* s, _str_size_t pos = 0) const;
-    _str_size_t find_first_of(const BaseStr<T>& other, _str_size_t pos = 0) const;
-    _str_size_t find_first_of(const T& c, _str_size_t pos = 0) const;
-    _str_size_t find_last_of(const T* s, _str_size_t pos = 0) const;
-    _str_size_t find_last_of(const BaseStr<T>& other, _str_size_t pos = 0) const;
-    _str_size_t find_last_of(const T& c, _str_size_t pos = 0) const;
-    _str_size_t find_first_not_of(const T* s, _str_size_t pos = 0) const;
-    _str_size_t find_first_not_of(const BaseStr<T>& other, _str_size_t pos = 0) const;
-    _str_size_t find_first_not_of(const T& c, _str_size_t pos = 0) const;
-    _str_size_t find_last_not_of(const T* s, _str_size_t pos = 0) const;
-    _str_size_t find_last_not_of(const BaseStr<T>& other, _str_size_t pos = 0) const;
-    _str_size_t find_last_not_of(const T& c, _str_size_t pos = 0) const;
-
-    CmpResult compare(const BaseStr<T>& other) const;
-    CmpResult compare(const T* s) const;
-    CmpResult operator==(const BaseStr<T>& other) const { return compare(other) == CmpResult::CMP_EQUAL ? TRUE : FALSE; }
-    CmpResult operator==(const T* s) const { return compare(s) == CmpResult::CMP_EQUAL ? TRUE : FALSE; }
-    CmpResult operator!=(const BaseStr<T>& other) const { return *this == other ? FALSE : TRUE; }
-    CmpResult operator!=(const T* s) const { return *this == s ? FALSE : TRUE; }
-    CmpResult operator<(const BaseStr<T>& other) const { return compare(other) == CmpResult::CMP_LESS ? TRUE : FALSE; }
-    CmpResult operator<(const T* s) const { return compare(s) == CmpResult::CMP_LESS ? TRUE : FALSE; }
-    CmpResult operator>(const BaseStr<T>& other) const { return other < *this; }
-    CmpResult operator>(const T* s) const { return s < *this; }
-    CmpResult operator<=(const BaseStr<T>& other) const { return other > *this ? FALSE : TRUE; }
-    CmpResult operator<=(const T* s) const { return s > *this ? FALSE : TRUE; }
-    CmpResult operator>=(const BaseStr<T>& other) const { return other < *this ? FALSE : TRUE; }
-    CmpResult operator>=(const T* s) const { return s < *this ? FALSE : TRUE; }
-
-    //int stoi() const;
-    //double stod() const;
-
+    // convert
+    sint stoi() const;
+    slong stol() const;
+    // TODO stod
+    T* to_string() const;
 };
 
-template <typename T>
-BaseStr<T>::BaseStr(const T* s) {
-    if (s == NULL) {
-        capacity = 0;
-        len = 0;
-        data = NULL;
+template <typename T, typename size_t>
+BaseStr<T, size_t>::BaseStr(const BaseStr<T, size_t>& other) {
+    MemPool<> constPool = getConstPool();
+
+    at_assert(other.pool == constPool);
+
+    if (0 == other.len) {
+        BaseStr();
     } else {
-        for (len = 0; s[len] != '\0'; len++);
-        data = new T[len + 1];
-        for (_str_size_t i = 0; i < len; i++)
-            data[i] = s[i];
-        data[len] = '\0';
+        at_assert(NULL != other.str);
+
+        pool    = constPool;
+        len     = other.len;
+        cap     = other.len;
+        str     = NULL;
+
+        try {
+            str = constPool.alloc(sizeof(T) * other.len);
+            at_memcpy(str, sizeof(T) * len, other.str, sizeof(T) * other.len);
+        } catch (Code c) {
+            throw c;
+        }
     }
 }
 
-template <typename T>
-BaseStr<T>::BaseStr(_str_size_t l, const T c) {
-    len = l;
-    data = new T[len + 1];
-    for (_str_size_t i = 0; i < len; i++)
-        data[i] = c;
-    data[len] = '\0';
+template <typename T, typename size_t>
+BaseStr<T, size_t>::BaseStr(const T* s) {
+    MemPool<> constPool = getConstPool();
+
+    if (NULL == s) {
+        BaseStr();
+    } else {
+        pool    = constPool;
+        len     = Character<T, size_t>::strlen(s);
+        cap     = len;
+
+        try {
+            str = constPool.alloc(sizeof(T) * len);
+            at_memcpy(str, sizeof(T) * len, s, sizeof(T) * len);
+        } catch (Code c) {
+            throw c;
+        }
+    }
 }
 
-template <typename T>
-BaseStr<T>::BaseStr(const BaseStr<T>& other) {
-    len = other.len;
-    data = new T[len + 1];
-    for (_str_size_t i = 0; i < len; i++)
-        data[i] = other.data[i];
-    data[len] = '\0';
+template <typename T, typename size_t>
+BaseStr<T, size_t>::BaseStr(size_t s, T c) {
+    MemPool<>   constPool = getConstPool();
+
+    if (0 == s) {
+        BaseStr();
+    } else {
+        pool    = constPool;
+        len     = s;
+        cap     = s;
+
+        try {
+            str = constPool.alloc(sizeof(T) * len);
+
+            for (size_t i = 0; i < len; i++)
+                str[i] = c;
+        } catch (Code c) {
+            throw c;
+        }
+    }
 }
 
-template <typename T>
-BaseStr<T>& BaseStr<T>::operator=(const BaseStr<T>& other) {
-    if (this == &other)
-        return *this;
+// TODO
 
-    delete[] data;
-    len = other.len;
-    data = new T[len + 1];
-    for (_str_size_t i = 0; i < len; i++)
-        data[i] = other.data[i];
-    data[len] = '\0';
-    return *this;
-}
 
-template <typename T>
-boolean BaseStr<T>::assign(const T *s)
-{
-    
-}
 
-template <typename T>
-inline boolean BaseStr<T>::assign(_str_size_t l, const T &c)
-{
-    return false;
-}
+} // end namespace atdb
 
-template <typename T>
-inline boolean BaseStr<T>::assign(const BaseStr<T> &other)
-{
-    return false;
-}
-
-template <typename T>
-inline boolean BaseStr<T>::swap(BaseStr<T> &other)
-{
-    return false;
-}
-
-template <typename T>
-inline T &BaseStr<T>::at(_str_size_t index)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline const T &BaseStr<T>::at(_str_size_t index) const
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline boolean BaseStr<T>::reserve(_str_size_t l)
-{
-    return boolean();
-}
-
-template <typename T>
-inline boolean BaseStr<T>::shrink_to_fit()
-{
-    return boolean();
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::clear()
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::insert(_str_size_t pos, const T *s)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::insert(_str_size_t pos, _str_size_t l, const T c)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::insert(_str_size_t pos, const BaseStr<T> &other)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::erase(_str_size_t pos, _str_size_t l)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::push_back(const T &c)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::pop_back()
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::append(const BaseStr<T> &other)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::append(const T *s)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::append(_str_size_t l, const T c)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::operator+=(const BaseStr<T> &other)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::operator+=(const T *s)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::operator+=(const T c)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::replace(_str_size_t pos, _str_size_t l, const T *s)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::replace(_str_size_t pos, _str_size_t l, const BaseStr<T> &other)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::resize(_str_size_t l)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::resize(_str_size_t l, const T &c)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline BaseStr<T> &BaseStr<T>::substr(_str_size_t pos, _str_size_t l)
-{
-    // TODO: insert return statement here
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find(const T *s, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find(const BaseStr<T> &other, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find(const T &c, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::rfind(const T *s, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::rfind(const BaseStr<T> &other, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::rfind(const T &c, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_first_of(const T *s, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_first_of(const BaseStr<T> &other, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_first_of(const T &c, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_last_of(const T *s, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_last_of(const BaseStr<T> &other, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_last_of(const T &c, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_first_not_of(const T *s, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_first_not_of(const BaseStr<T> &other, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_first_not_of(const T &c, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_last_not_of(const T *s, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_last_not_of(const BaseStr<T> &other, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline _str_size_t BaseStr<T>::find_last_not_of(const T &c, _str_size_t pos) const
-{
-    return _str_size_t();
-}
-
-template <typename T>
-inline CmpResult BaseStr<T>::compare(const BaseStr<T> &other) const
-{
-    return CmpResult();
-}
-
-template <typename T>
-inline CmpResult BaseStr<T>::compare(const T *s) const
-{
-    return CmpResult();
-}
-
-} // namespace ambi
-
-#endif // AMBI_STR_H
+#endif // AT_STR_H

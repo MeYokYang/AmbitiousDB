@@ -1,6 +1,11 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef AT_CLIENT_H
+#define AT_CLIENT_H
+
+namespace atdb {
+namespace atclient {
 
 
+} // end namespace atclient
+} // end namespace atdb
 
-#endif // CLIENT_H
+#endif // AT_CLIENT_H

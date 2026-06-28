@@ -1,26 +1,17 @@
-#include "server.h"
-#include "list.h"
-#include "standard.h"
-#include "str.h"
+#include "server/server.h"
+#include "ambi/mem/pool.h"
 
-namespace ambitiousdb {
+
+namespace atdb {
 namespace atserver {
 
-} // namespace end: ambitiousdb
+
+
+
 } // namespace end: atserver
+} // namespace end: atdb
 
 int main () {
-    LinkedList<sint> list;
-    for (sint i = 0; i < 100; i++)
-    {
-        list.insert(100);
-    }
-
-    ArrayList<Str> list2;
-    for (sint i = 0; i < 100; i++)
-    {
-        list2.insert(Str("100"));
-    }
 
     return 0;
 }

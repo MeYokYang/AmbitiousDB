@@ -1,11 +1,12 @@
-#ifndef INIT_H
-#define INIT_H
+#ifndef AT_INIT_H
+#define AT_INIT_H
 
-
-namespace ambitiousdb {
+namespace atdb {
 namespace atinit {
 
-} // namespace ambitiousdb
-} // namespace atinit
 
-#endif // INIT_H
+
+} // end namespace atinit
+} // end namespace atdb
+
+#endif // AT_INIT_H

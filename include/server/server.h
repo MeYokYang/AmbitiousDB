@@ -1,11 +1,18 @@
-#ifndef SERVICE_H
-#define SERVICE_H
+#ifndef AT_SERVER_H
+#define AT_SERVER_H
 
-
-namespace ambitiousdb {
+namespace atdb {
 namespace atserver {
 
-} // namespace end: ambitiousdb
-} // namespace end: atserver
 
-#endif // SERVICE_H
+
+
+
+
+
+
+
+} // end namespace atserver
+} // end namespace atdb
+
+#endif // AT_SERVER_H

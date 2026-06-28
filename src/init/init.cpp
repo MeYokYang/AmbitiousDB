@@ -1,12 +1,14 @@
-#include "init.h"
-
-
-namespace ambitiousdb {
+#include <iostream>
+namespace atdb {
 namespace atinit {
 
-} // namespace ambitiousdb
-} // namespace atinit
+
+    
+} // end namespace atinit
+} // end namespace atdb
 
 int main () {
+    printf("init");
+    printf("AAA");
     return 0;
 }

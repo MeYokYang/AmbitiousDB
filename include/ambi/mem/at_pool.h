@@ -13,6 +13,7 @@ enum class PoolType {
     POOL_CONST,  // 常量内存池
     POOL_SHARE,  // 共享内存池
     POOL_NORMAL, // 普通内存池
+    POOL_STRING, // 字符串内存池
 };
 
 template <typename size_t = atulong> class MemPool {
@@ -98,6 +99,7 @@ template <typename size_t> atbool MemPool<size_t>::poolInit() {
 
 extern MemPool<> systemPool;
 extern MemPool<> constPool;
+extern MemPool<> stringPool;
 
 atbool initMem();
 
@@ -106,6 +108,9 @@ MemPool<> &getSystemPool();
 
 INLINE
 MemPool<> &getConstPool();
+
+INLINE
+MemPool<> &getStringPool();
 
 } // end namespace atdb
 

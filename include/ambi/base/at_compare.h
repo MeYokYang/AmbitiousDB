@@ -25,6 +25,8 @@ static const atbool ret_or[3][3] = {
     {UNKNOWN, TRUE, UNKNOWN}
 };
 
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
     
 } // end namespace atdb
 

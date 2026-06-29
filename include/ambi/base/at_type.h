@@ -15,6 +15,8 @@ typedef signed int      atint;
 typedef unsigned int    atuint;  
 typedef signed long     atlong; 
 typedef unsigned long   atulong; 
+typedef float           atfloat;
+typedef double          atdouble;
 
 #define TYPE_MAX(type)      (std::numeric_limits<type>::max() - 1)
 #define TYPE_NONE(type)     (std::numeric_limits<type>::max())

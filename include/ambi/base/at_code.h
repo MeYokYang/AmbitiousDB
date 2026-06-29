@@ -18,6 +18,9 @@ enum class Code : atuint
     OUT_OF_MEMORY       = 2000,
     MEMPOOL_INIT_ERR    = 2001,
 
+    // init
+    PORT_IN_USE         = 3000,
+
 };
 
 

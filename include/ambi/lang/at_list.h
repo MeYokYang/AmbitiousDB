@@ -2,7 +2,6 @@
 #define AT_LIST_H
 
 #include "ambi/mem/at_pool.h"
-#include <new>
 
 namespace atdb {
 
